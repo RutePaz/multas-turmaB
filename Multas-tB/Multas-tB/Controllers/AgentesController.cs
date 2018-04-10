@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Data.Entity;
+using System.IO;
 using System.Linq;
 using System.Net;
 using System.Web;
@@ -63,23 +64,58 @@ namespace Multas_tB.Controllers {
       [HttpPost]
       // anotador para proteção por roubo de identidade
       [ValidateAntiForgeryToken]
-      public ActionResult Create([Bind(Include = "Nome,Esquadra,Fotografia")] Agentes agentes) {
+      public ActionResult Create([Bind(Include = "Nome,Esquadra")] Agentes agente, HttpPostedFileBase uploadFotografia) {
          // escrever os dados de um novo Agente na BD 
+
+         // especificar o ID do novo Agente
+         int idNovoAgente = db.Agentes.Max(a => a.ID) + 1;
+         // guardar o ID do novo Agente
+         agente.ID = idNovoAgente;
+
+         // especificar (escolher) o nome do ficheiro
+         string nomeImagem = "Agente_" + idNovoAgente + ".jpg";
+
+         // var. auxiliar
+         string path = "";
+
+         // validar se a imagem foi fornecida
+         if(uploadFotografia != null) {
+            // o ficheiro foi fornecido
+            // validar se o q foi fornecido é uma imagem ----> fazer em casa
+            // formatar o tamanho da imagem
+
+            // criar o caminho completo até ao sítio onde o ficheiro
+            // será guardado
+            path = Path.Combine(Server.MapPath("~/imagens/"), nomeImagem);
+
+            // guardar o nome do ficheiro na BD
+            agente.Fotografia = nomeImagem;
+         }
+         else {
+            // não foi fornecido qq ficheiro
+            // gerar uma mensagem de erro
+            ModelState.AddModelError("", "Não foi fornecida uma imagem...");
+            // devolver o controlo à View
+            return View(agente);
+         }
 
          // ModelState.IsValid -> confronta os dados fornecidos da View
          //                       com as exigências do Modelo
          if(ModelState.IsValid) {
             // adiciona o novo Agente à BD
-            db.Agentes.Add(agentes);
+            db.Agentes.Add(agente);
             // faz 'Commit' às alterações
             db.SaveChanges();
+            // escrever o ficheiro com a fotografia no disco rígido, na pasta 'imagens'
+            uploadFotografia.SaveAs(path);
+
             // se tudo correr bem, redireciona para a página de Index
             return RedirectToAction("Index");
          }
 
          // se houver um erro, 
          // reapresenta os dados do Agente na View
-         return View(agentes);
+         return View(agente);
       }
 
 

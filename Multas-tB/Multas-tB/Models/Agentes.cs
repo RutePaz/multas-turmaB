@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Web;
 
@@ -12,6 +13,7 @@ namespace Multas_tB.Models {
       }
 
       [Key]
+      [DatabaseGenerated(DatabaseGeneratedOption.None)]
       public int ID { get; set; }
 
       [Required(ErrorMessage = "O {0} é de preenchimento obrigatório!")]
@@ -20,7 +22,7 @@ namespace Multas_tB.Models {
       public string Nome { get; set; }
 
       [Required(ErrorMessage = "A {0} é de preenchimento obrigatório!")]
-      [RegularExpression("[A-ZÍÉÂÁ]*[a-záéíóúàèìòùâêîôûäëïöüãõç -]*", ErrorMessage ="A {0} só pode conter letras.")]
+      //[RegularExpression("[A-ZÍÉÂÁ]*[a-záéíóúàèìòùâêîôûäëïöüãõç -]*", ErrorMessage ="A {0} só pode conter letras.")]
       public string Esquadra { get; set; }
 
       public string Fotografia { get; set; }
