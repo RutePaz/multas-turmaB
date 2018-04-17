@@ -72,7 +72,7 @@ namespace Multas_tB.Controllers {
       }
 
 
-      
+
       // GET: Agentes/Create
       /// <summary>
       /// 
@@ -103,7 +103,18 @@ namespace Multas_tB.Controllers {
          // escrever os dados de um novo Agente na BD 
 
          // especificar o ID do novo Agente
-         int idNovoAgente = db.Agentes.Max(a => a.ID) + 1;
+         // testar se há registos na tabela dos Agentes
+         // if (db.Agentes.Count()!=0){ }
+
+         // ou então, usar a instrução TRY/CATCH
+         int idNovoAgente = 0;
+         try {
+            idNovoAgente = db.Agentes.Max(a => a.ID) + 1;
+         }
+         catch(Exception) {
+            idNovoAgente = 1;
+         }
+
          // guardar o ID do novo Agente
          agente.ID = idNovoAgente;
 
@@ -137,15 +148,20 @@ namespace Multas_tB.Controllers {
          // ModelState.IsValid -> confronta os dados fornecidos da View
          //                       com as exigências do Modelo
          if(ModelState.IsValid) {
-            // adiciona o novo Agente à BD
-            db.Agentes.Add(agente);
-            // faz 'Commit' às alterações
-            db.SaveChanges();
-            // escrever o ficheiro com a fotografia no disco rígido, na pasta 'imagens'
-            uploadFotografia.SaveAs(path);
+            try {
+               // adiciona o novo Agente à BD
+               db.Agentes.Add(agente);
+               // faz 'Commit' às alterações
+               db.SaveChanges();
+               // escrever o ficheiro com a fotografia no disco rígido, na pasta 'imagens'
+               uploadFotografia.SaveAs(path);
 
-            // se tudo correr bem, redireciona para a página de Index
-            return RedirectToAction("Index");
+               // se tudo correr bem, redireciona para a página de Index
+               return RedirectToAction("Index");
+            }
+            catch(Exception  ) {
+               ModelState.AddModelError("", "Houve um erro com a criação do novo Agente...");
+            }
          }
 
          // se houver um erro, 
