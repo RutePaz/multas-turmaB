@@ -159,7 +159,7 @@ namespace Multas_tB.Controllers {
                // se tudo correr bem, redireciona para a página de Index
                return RedirectToAction("Index");
             }
-            catch(Exception  ) {
+            catch(Exception) {
                ModelState.AddModelError("", "Houve um erro com a criação do novo Agente...");
             }
          }
@@ -274,12 +274,23 @@ namespace Multas_tB.Controllers {
       [HttpPost, ActionName("Delete")]
       [ValidateAntiForgeryToken]
       public ActionResult DeleteConfirmed(int id) {
-         Agentes agentes = db.Agentes.Find(id);
-         // remove o Agente da BD
-         db.Agentes.Remove(agentes);
-         // Commit
-         db.SaveChanges();
-         return RedirectToAction("Index");
+         Agentes agente = db.Agentes.Find(id);
+         try {
+            // remove o Agente da BD
+            db.Agentes.Remove(agente);
+            // Commit
+            db.SaveChanges();
+            return RedirectToAction("Index");
+
+         }
+         catch(Exception ex) {
+            ModelState.AddModelError("", string.Format("Não é possível apagar o Agente nº {0} - {1}, porque há multas associadas a ele...",
+                                         id, agente.Nome)
+            );
+         }
+         // se cheguei aqui é pq houve um problema
+         // devolvo os dados do Agente à View
+         return View(agente);
       }
 
       protected override void Dispose(bool disposing) {

@@ -1,48 +1,54 @@
 ﻿@model Multas_tB.Models.Agentes
 
 @{
-    ViewBag.Title = "Delete";
+    ViewBag.Title = "Agentes";
 }
 
-<h2>Delete</h2>
+<h2>Apagar</h2>
 
-<h3>Are you sure you want to delete this?</h3>
+<h3>Quer mesmo apagar este Agente?</h3>
 <div>
-    <h4>Agentes</h4>
-    <hr />
-    <dl class="dl-horizontal">
-        <dt>
-            @Html.DisplayNameFor(model => model.Nome)
-        </dt>
 
-        <dd>
-            @Html.DisplayFor(model => model.Nome)
-        </dd>
+   <hr />
+   @* HTML Helper para apresentar as mensagens de erro *@
+   @Html.ValidationSummary(true, "", new { @class = "text-danger" })
 
-        <dt>
-            @Html.DisplayNameFor(model => model.Esquadra)
-        </dt>
+   <dl class="dl-horizontal">
+      <dt>
+         @Html.DisplayNameFor(model => model.Nome)
+      </dt>
 
-        <dd>
-            @Html.DisplayFor(model => model.Esquadra)
-        </dd>
+      <dd>
+         @Html.DisplayFor(model => model.Nome)
+      </dd>
 
-        <dt>
-            @Html.DisplayNameFor(model => model.Fotografia)
-        </dt>
+      <dt>
+         @Html.DisplayNameFor(model => model.Esquadra)
+      </dt>
 
-        <dd>
-            @Html.DisplayFor(model => model.Fotografia)
-        </dd>
+      <dd>
+         @Html.DisplayFor(model => model.Esquadra)
+      </dd>
 
-    </dl>
+      <dt>
+         @Html.DisplayNameFor(model => model.Fotografia)
+      </dt>
 
-    @using (Html.BeginForm()) {
-        @Html.AntiForgeryToken()
+      <dd>
+         @*@Html.DisplayFor(model => model.Fotografia)*@
+         <a href="~/imagens/@Model.Fotografia" target="_blank">
+            <img src="~/imagens/@Model.Fotografia" width="50" height="37" />
+         </a>
+      </dd>
 
-        <div class="form-actions no-color">
-            <input type="submit" value="Delete" class="btn btn-default" /> |
-            @Html.ActionLink("Back to List", "Index")
-        </div>
-    }
+   </dl>
+
+   @using(Html.BeginForm()) {
+      @Html.AntiForgeryToken()
+
+      <div class="form-actions no-color">
+         <input type="submit" value="Apagar" class="btn btn-danger" /> |
+         @Html.ActionLink("Regressar ao início", "Index")
+      </div>
+   }
 </div>
