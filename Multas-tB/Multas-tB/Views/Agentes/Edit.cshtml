@@ -11,7 +11,7 @@
    Quando se deseja efetuar o upload de um ficheiro,
    esta instrução é insuficiente
    @using(Html.BeginForm())
-   é necessário adicionar-lhe o parâmetro 'enctype = "multipart/form-data" ' 
+   é necessário adicionar-lhe o parâmetro 'enctype = "multipart/form-data" '
 *@
 @using(Html.BeginForm("Edit",
                       "Agentes",
@@ -27,6 +27,12 @@
       <hr />
       @Html.ValidationSummary(true, "", new { @class = "text-danger" })
       @Html.HiddenFor(model => model.ID)
+
+      @* esta instrução foi aqui adicionada, pois é necessária para
+         garantir que o nome da fotografia
+         de um Agente seja devidamente entregue no controller *@
+      @Html.HiddenFor(model => model.Fotografia)
+      
 
       <div class="form-group">
          @Html.LabelFor(model => model.Nome, htmlAttributes: new { @class = "control-label col-md-2" })
