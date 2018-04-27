@@ -26,7 +26,7 @@ namespace Multas_tB.Controllers {
 
          // obter a lista de todos os agentes
          // em SQL:  SELECT * FROM Agentes ORDER BY Nome;
-         var listaDeAgentes = db.Agentes.ToList().OrderBy(a => a.Nome);
+         var listaDeAgentes = db.Agentes.OrderBy(a => a.Nome).ToList();
 
          return View(listaDeAgentes);
          //  return View();
@@ -90,7 +90,7 @@ namespace Multas_tB.Controllers {
       // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
       // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
       /// <summary>
-      /// 
+      /// adicionar um novo Agente
       /// </summary>
       /// <param name="agente"></param>
       /// <param name="uploadFotografia"></param>
@@ -161,7 +161,7 @@ namespace Multas_tB.Controllers {
             }
             catch(Exception ex) {
                ModelState.AddModelError("", "Houve um erro com a criação do novo Agente...");
-          
+
                /// se existir uma classe chamada 'Erro.cs'
                /// iremos nela registar os dados do erro
                /// - criar um objeto desta classe
@@ -177,8 +177,8 @@ namespace Multas_tB.Controllers {
                /// - notificar um GESTOR do sistema, por email,
                ///   ou por outro meio, da ocorrência do erro 
                ///   e dos seus dados              
-               
-               }
+
+            }
          }
 
          // se houver um erro, 
@@ -237,23 +237,31 @@ namespace Multas_tB.Controllers {
       // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
       // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
       /// <summary>
-      /// 
+      /// editar os dados de um Agente
       /// </summary>
-      /// <param name="agentes"></param>
+      /// <param name="agente"></param>
       /// <returns></returns>
       [HttpPost]
       [ValidateAntiForgeryToken]
-      public ActionResult Edit([Bind(Include = "ID,Nome,Esquadra,Fotografia")] Agentes agentes) {
+      public ActionResult Edit([Bind(Include = "ID,Nome,Esquadra,Fotografia")] Agentes agente) {
+         /// a primeira ação a executar neste método é ajustar o nome da variável de entrada.
+         /// 'agentes' é um nome criado automaticamente e reflete o nome da classe,
+         /// mas como está no plural não é adequado, pois os dados referem-se a apenas um Agente
+
          if(ModelState.IsValid) {
             // neste caso já existe um Agente
             // apenas quero EDITAR os seus dados
-            db.Entry(agentes).State = EntityState.Modified;
+            db.Entry(agente).State = EntityState.Modified;
             // efetuar 'Commit'
             db.SaveChanges();
             return RedirectToAction("Index");
          }
-         return View(agentes);
+         return View(agente);
       }
+
+
+
+
 
       // GET: Agentes/Delete/5
       /// <summary>
