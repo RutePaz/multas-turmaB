@@ -243,10 +243,24 @@ namespace Multas_tB.Controllers {
       /// <returns></returns>
       [HttpPost]
       [ValidateAntiForgeryToken]
-      public ActionResult Edit([Bind(Include = "ID,Nome,Esquadra,Fotografia")] Agentes agente) {
+      public ActionResult Edit([Bind(Include = "ID,Nome,Esquadra,Fotografia")] Agentes agente, HttpPostedFileBase uploadFoto) {
          /// a primeira ação a executar neste método é ajustar o nome da variável de entrada.
          /// 'agentes' é um nome criado automaticamente e reflete o nome da classe,
-         /// mas como está no plural não é adequado, pois os dados referem-se a apenas um Agente
+         /// mas como está no plural não é adequado, pois os dados referem-se a apenas um Agente.
+
+         /// como se pretende editar os dados de um Agente,
+         /// tem de haver a hipótese de se editar a fotografia dele.
+         /// Por esse motivo, é necessário adicionar aos parâmetros de entrada do método
+         /// uma variável do tipo HttpPostedFileBase para receber o ficheiro da imagem.
+         /// É igualmente necessário adicionar, na View, um objeto do tipo <input type="file" />
+         /// para possibilitar a escolha da imagem a efetuar upload.
+         /// O nome da variável no método do controller e na view tem de ser o mesmo.
+         /// 
+         /// De igual forma, é necessário alterar a forma como se configura o objeto do tipo <form />,
+         /// responsável por enviar os dados do browser para o servidor,
+         /// adicionando-lhe o parâmetro 'enctype = "multipart/form-data" '
+
+
 
          if(ModelState.IsValid) {
             // neste caso já existe um Agente
