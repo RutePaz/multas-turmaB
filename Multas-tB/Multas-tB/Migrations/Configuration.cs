@@ -7,14 +7,14 @@ namespace Multas_tB.Migrations
     using System.Data.Entity.Migrations;
     using System.Linq;
 
-    internal sealed class Configuration : DbMigrationsConfiguration<Multas_tB.Models.MultasDb>
+    internal sealed class Configuration : DbMigrationsConfiguration<Multas_tB.Models.ApplicationDbContext>
     {
         public Configuration()
         {
             AutomaticMigrationsEnabled = true;
         }
 
-        protected override void Seed(Multas_tB.Models.MultasDb context)
+        protected override void Seed(Multas_tB.Models.ApplicationDbContext context)
         {
          //*********************************************************************
          // adiciona AGENTES

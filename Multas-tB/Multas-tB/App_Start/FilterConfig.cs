@@ -1,6 +1,6 @@
 ﻿using System.Web.Mvc;
 
-namespace IdentitySample
+namespace Multas_tB
 {
     public class FilterConfig
     {

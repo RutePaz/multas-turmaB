@@ -13,7 +13,7 @@ namespace Multas_tB.Controllers {
    public class AgentesController : Controller {
 
       // cria uma variável que representa a Base de Dados
-      private MultasDb db = new MultasDb();
+      private ApplicationDbContext db = new ApplicationDbContext();
 
       // GET: Agentes
       /// <summary>

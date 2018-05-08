@@ -1,7 +1,7 @@
 ﻿using System.Web.Mvc;
 using System.Web.Routing;
 
-namespace IdentitySample
+namespace Multas_tB
 {
     public class RouteConfig
     {
