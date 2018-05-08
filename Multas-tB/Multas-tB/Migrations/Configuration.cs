@@ -1,25 +1,26 @@
-namespace Multas_tB.Migrations
-{
+namespace Multas_tB.Migrations {
    using Multas_tB.Models;
    using System;
    using System.Collections.Generic;
    using System.Data.Entity;
-    using System.Data.Entity.Migrations;
-    using System.Linq;
+   using System.Data.Entity.Migrations;
+   using System.Linq;
 
-    internal sealed class Configuration : DbMigrationsConfiguration<Multas_tB.Models.ApplicationDbContext>
-    {
-        public Configuration()
-        {
-            AutomaticMigrationsEnabled = true;
-        }
+   internal sealed class Configuration : DbMigrationsConfiguration<Multas_tB.Models.ApplicationDbContext> {
+      public Configuration() {
+         AutomaticMigrationsEnabled = true;
+      }
 
-        protected override void Seed(Multas_tB.Models.ApplicationDbContext context)
-        {
+      protected override void Seed(Multas_tB.Models.ApplicationDbContext context) {
          //*********************************************************************
          // adiciona AGENTES
          var agentes = new List<Agentes> {
-            new Agentes {ID=1, Nome="Tânia Vieira", Esquadra="Ourém", Fotografia="TaniaVieira.jpg" },
+            new Agentes {ID=1, 
+                         Nome="Tânia Vieira", 
+                         Esquadra="Ourém", 
+                         Fotografia="TaniaVieira.jpg",
+                         UserName="tania@mail.pt"},
+            
             new Agentes {ID=2, Nome="António Rocha", Esquadra="Ourém", Fotografia="AntonioRocha.jpg" },
             new Agentes {ID=3, Nome="André Silveira", Esquadra="Abrantes", Fotografia="AndreSilveira.jpg" },
             new Agentes {ID=4, Nome="Lurdes Vieira", Esquadra="Leiria", Fotografia="LurdesVieira.jpg" },

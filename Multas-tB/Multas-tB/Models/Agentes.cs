@@ -29,5 +29,13 @@ namespace Multas_tB.Models {
 
       // referência às multas q um Agente 'emite'
       public virtual ICollection<Multas> ListaDeMultas { get; set; }
+
+      //*************************************************************
+      // nome do login (UserName) utilizado pelo Agente
+      // na prática, é uma FK para a tabela dos utilizadores AspNetUsers
+      //   [Required]
+      public string UserName { get; set; }
+
+
    }
 }
