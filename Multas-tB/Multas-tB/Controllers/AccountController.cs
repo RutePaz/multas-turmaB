@@ -129,16 +129,42 @@ namespace Multas_tB.Controllers {
          if(ModelState.IsValid) {
             var user = new ApplicationUser {
                UserName = model.Email,
-               Email = model.Email,
-               NomeProprio = model.NomeProprio,
-               Apelido = model.Apelido,
-               DataNascimento = model.DataNasc,
-               NIF = model.NumContribuinte
+               Email = model.Email //,
+               //NomeProprio = model.NomeProprio,
+               //Apelido = model.Apelido,
+               //DataNascimento = model.DataNasc,
+               //NIF = model.NumContribuinte
             };
 
             var result = await UserManager.CreateAsync(user, model.Password);
 
             if(result.Succeeded) {
+               try {
+                  /// se houve sucesso com a criação de um utilizador
+                  /// tenho de guardar os dados do utilizador que se registou
+                  Utilizadores utilizador = new Utilizadores();
+                  utilizador = model.Utilizador;
+                  // associar estes dados com o utilizador q se registou
+                  utilizador.NomeRegistoDoUtilizador = user.UserName;
+                  // guardar os dados na base de dados
+                  ApplicationDbContext db = new ApplicationDbContext();
+                  db.Utilizadores.Add(utilizador);
+                  db.SaveChanges();
+               }
+               catch(Exception ex) {
+                   /// eventualmente, apagar o utilizador que se acabou de registar
+                   /// eventualmente, registar numa tabela da BD o erro
+                   ///       - o nome do controller
+                   ///       - o nome do método
+                   ///       - a data
+                   ///       - a hora
+                   ///       - a mensagem de erro (ex.message)
+                   ///       - outros dados considerados relevantes
+                   /// eventualmente, enviar email ao Gestor do Sistema com o relato da ocorrência
+                   /// eventualmente, reenviar à view para reescrever os dados
+               }
+
+
                var code = await UserManager.GenerateEmailConfirmationTokenAsync(user.Id);
                var callbackUrl = Url.Action("ConfirmEmail", "Account", new { userId = user.Id, code = code }, protocol: Request.Url.Scheme);
                await UserManager.SendEmailAsync(user.Id, "Confirm your account", "Please confirm your account by clicking this link: <a href=\"" + callbackUrl + "\">link</a>");

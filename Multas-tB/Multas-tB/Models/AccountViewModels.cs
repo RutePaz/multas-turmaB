@@ -79,12 +79,17 @@ namespace Multas_tB.Models {
       //***********************************************************
       // atributos 'específicos' de um utilizador
       //***********************************************************
-      [Required(ErrorMessage ="O {0} é de preenchimento obrigatório")]
-      [Display(Name ="Nome próprio")]
-      public string NomeProprio { get; set; }
-      public string Apelido { get; set; }
-      public DateTime DataNasc { get; set; }
-      public string NumContribuinte { get; set; }
+      //[Required(ErrorMessage ="O {0} é de preenchimento obrigatório")]
+      //[Display(Name ="Nome próprio")]
+      //public string NomeProprio { get; set; }
+      //public string Apelido { get; set; }
+      //public DateTime DataNasc { get; set; }
+      //public string NumContribuinte { get; set; }
+
+      //*********************************************************************
+      // nesta segunda versão, basta adicionar um objeto do tipo
+      // Utilizador, para associar todos os seus atributos
+      public Utilizadores Utilizador { get; set; }
 
    }
 

@@ -26,14 +26,31 @@ namespace Multas_tB.Controllers {
          // enviar para a View uma lista com todos os Agentes, da BD
 
 
+         //***********************************************************
          // recuperar os dados pessoais da pessoa que se autenticou
-         var dadosPessoais = db.Users.Find(User.Identity.GetUserId());
+         //***********************************************************
+
+         //var dadosPessoais = db.Users.Find(User.Identity.GetUserId());
+         //// agora, com este objeto, já posso utilizar
+         //// os dados pessoais de um utilizador no meu programa
+         //// por exemplo:
+         //Session["nomeUtilizador"] = dadosPessoais.NomeProprio
+         //                            + " "
+         //                            + dadosPessoais.Apelido;
+
+         var dadosPessoais = db.Utilizadores
+                              .Where(u => u.NomeRegistoDoUtilizador
+                                           .Equals(User.Identity.Name))
+                              .FirstOrDefault();
          // agora, com este objeto, já posso utilizar
          // os dados pessoais de um utilizador no meu programa
          // por exemplo:
          Session["nomeUtilizador"] = dadosPessoais.NomeProprio
                                      + " "
                                      + dadosPessoais.Apelido;
+
+
+
 
 
 

@@ -14,15 +14,6 @@ namespace Multas_tB.Models {
    /// </summary>
    public class ApplicationUser : IdentityUser {
 
-      /// <summary>
-      /// os atributos q aqui vão ser adicionados
-      /// serão adicionados à tabela dos utilizadores
-      /// </summary>
-      public string NomeProprio { get; set; }
-      public string Apelido { get; set; }
-      public DateTime? DataNascimento { get; set; }
-      public string NIF { get; set; }
-
       public async Task<ClaimsIdentity> GenerateUserIdentityAsync(UserManager<ApplicationUser> manager) {
          // Note the authenticationType must match the one defined in CookieAuthenticationOptions.AuthenticationType
          var userIdentity = await manager.CreateIdentityAsync(this, DefaultAuthenticationTypes.ApplicationCookie);
@@ -62,6 +53,9 @@ namespace Multas_tB.Models {
       public virtual DbSet<Condutores> Condutores { get; set; } // tabela Condutores
       public virtual DbSet<Agentes> Agentes { get; set; } // tabela Agentes
       public virtual DbSet<Viaturas> Viaturas { get; set; } // tabela Viaturas
+
+      public virtual DbSet<Utilizadores> Utilizadores { get; set; } // tabela Utilizadores
+
 
       protected override void OnModelCreating(DbModelBuilder modelBuilder) {
          modelBuilder.Conventions.Remove<OneToManyCascadeDeleteConvention>();
