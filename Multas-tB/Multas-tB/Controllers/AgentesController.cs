@@ -7,6 +7,7 @@ using System.Linq;
 using System.Net;
 using System.Web;
 using System.Web.Mvc;
+using Microsoft.AspNet.Identity;
 using Multas_tB.Models;
 
 namespace Multas_tB.Controllers {
@@ -24,9 +25,23 @@ namespace Multas_tB.Controllers {
          // db.Agentes.ToList() -> em sql: SELECT * FROM Agentes;
          // enviar para a View uma lista com todos os Agentes, da BD
 
+
+         // recuperar os dados pessoais da pessoa que se autenticou
+         var dadosPessoais = db.Users.Find(User.Identity.GetUserId());
+         // agora, com este objeto, já posso utilizar
+         // os dados pessoais de um utilizador no meu programa
+         // por exemplo:
+         Session["nomeUtilizador"] = dadosPessoais.NomeProprio
+                                     + " "
+                                     + dadosPessoais.Apelido;
+
+
+
+
+
          // obter a lista de todos os agentes
          // em SQL:  SELECT * FROM Agentes ORDER BY Nome;
-         var listaDeAgentes = db.Agentes.ToList().OrderBy(a => a.Nome);
+         var listaDeAgentes = db.Agentes.OrderBy(a => a.Nome).ToList();
 
          return View(listaDeAgentes);
          //  return View();
@@ -161,7 +176,7 @@ namespace Multas_tB.Controllers {
             }
             catch(Exception ex) {
                ModelState.AddModelError("", "Houve um erro com a criação do novo Agente...");
-          
+
                /// se existir uma classe chamada 'Erro.cs'
                /// iremos nela registar os dados do erro
                /// - criar um objeto desta classe
@@ -177,8 +192,8 @@ namespace Multas_tB.Controllers {
                /// - notificar um GESTOR do sistema, por email,
                ///   ou por outro meio, da ocorrência do erro 
                ///   e dos seus dados              
-               
-               }
+
+            }
          }
 
          // se houver um erro, 
