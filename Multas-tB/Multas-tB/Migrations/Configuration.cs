@@ -20,16 +20,15 @@ namespace Multas_tB.Migrations {
                          Esquadra="Ourém", 
                          Fotografia="TaniaVieira.jpg",
                          UserName="tania@mail.pt"},
-            
-            new Agentes {ID=2, Nome="António Rocha", Esquadra="Ourém", Fotografia="AntonioRocha.jpg" },
-            new Agentes {ID=3, Nome="André Silveira", Esquadra="Abrantes", Fotografia="AndreSilveira.jpg" },
-            new Agentes {ID=4, Nome="Lurdes Vieira", Esquadra="Leiria", Fotografia="LurdesVieira.jpg" },
-            new Agentes {ID=5, Nome="Cláudia Pinto", Esquadra="Porto", Fotografia="ClaudiaPinto.jpg" },
-            new Agentes {ID=6, Nome="Rui Vieira", Esquadra="Tomar", Fotografia="RuiVieira.jpg" },
-            new Agentes {ID=7, Nome="Paulo Vieira", Esquadra="Torres Novas", Fotografia="PauloVieira.jpg" },
-            new Agentes {ID=8, Nome="Augusto Carvalho", Esquadra="Lisboa", Fotografia="AugustoCarvalho.jpg" },
-            new Agentes {ID=9, Nome="Beatriz Pinto", Esquadra="Porto", Fotografia="BeatrizPinto.jpg" },
-            new Agentes {ID=10, Nome="José Alves", Esquadra="Alcanena", Fotografia="JoseAlves.jpg" }
+            new Agentes {ID=2, Nome="António Rocha", Esquadra="Ourém", Fotografia="AntonioRocha.jpg", UserName="noEmail@mail.pt"  },
+            new Agentes {ID=3, Nome="André Silveira", Esquadra="Abrantes", Fotografia="AndreSilveira.jpg", UserName="andre@mail.pt" },
+            new Agentes {ID=4, Nome="Lurdes Vieira", Esquadra="Leiria", Fotografia="LurdesVieira.jpg", UserName="noEmail@mail.pt" },
+            new Agentes {ID=5, Nome="Cláudia Pinto", Esquadra="Porto", Fotografia="ClaudiaPinto.jpg", UserName="noEmail@mail.pt" },
+            new Agentes {ID=6, Nome="Rui Vieira", Esquadra="Tomar", Fotografia="RuiVieira.jpg", UserName="noEmail@mail.pt" },
+            new Agentes {ID=7, Nome="Paulo Vieira", Esquadra="Torres Novas", Fotografia="PauloVieira.jpg", UserName="noEmail@mail.pt" },
+            new Agentes {ID=8, Nome="Augusto Carvalho", Esquadra="Lisboa", Fotografia="AugustoCarvalho.jpg", UserName="noEmail@mail.pt" },
+            new Agentes {ID=9, Nome="Beatriz Pinto", Esquadra="Porto", Fotografia="BeatrizPinto.jpg", UserName="noEmail@mail.pt" },
+            new Agentes {ID=10, Nome="José Alves", Esquadra="Alcanena", Fotografia="JoseAlves.jpg", UserName="noEmail@mail.pt" }
          };
          agentes.ForEach(aa => context.Agentes.AddOrUpdate(a => a.Nome, aa));
          context.SaveChanges();

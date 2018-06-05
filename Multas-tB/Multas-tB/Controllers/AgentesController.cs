@@ -11,6 +11,11 @@ using Microsoft.AspNet.Identity;
 using Multas_tB.Models;
 
 namespace Multas_tB.Controllers {
+
+
+   // [Authorize] // só pessoas autenticadas é que podem executar estes recursos
+   [Authorize(Roles = "Agentes,GestaoDePessoal")]
+
    public class AgentesController : Controller {
 
       // cria uma variável que representa a Base de Dados
@@ -21,6 +26,8 @@ namespace Multas_tB.Controllers {
       /// lista todos os agentes
       /// </summary>
       /// <returns></returns>
+      [AllowAnonymous] // apesar de haver restrições de acesso,
+      // um user anónimo consegue aceder
       public ActionResult Index() {
          // db.Agentes.ToList() -> em sql: SELECT * FROM Agentes;
          // enviar para a View uma lista com todos os Agentes, da BD
@@ -38,16 +45,16 @@ namespace Multas_tB.Controllers {
          //                            + " "
          //                            + dadosPessoais.Apelido;
 
-         var dadosPessoais = db.Utilizadores
-                              .Where(u => u.NomeRegistoDoUtilizador
-                                           .Equals(User.Identity.Name))
-                              .FirstOrDefault();
+         //var dadosPessoais = db.Utilizadores
+         //                     .Where(u => u.NomeRegistoDoUtilizador
+         //                                  .Equals(User.Identity.Name))
+         //                     .FirstOrDefault();
          // agora, com este objeto, já posso utilizar
          // os dados pessoais de um utilizador no meu programa
          // por exemplo:
-         Session["nomeUtilizador"] = dadosPessoais.NomeProprio
-                                     + " "
-                                     + dadosPessoais.Apelido;
+         //Session["nomeUtilizador"] = dadosPessoais.NomeProprio
+         //                            + " "
+         //                            + dadosPessoais.Apelido;
 
 
 
@@ -99,6 +106,13 @@ namespace Multas_tB.Controllers {
             return RedirectToAction("Index");
          }
 
+
+
+         /// falta, aqui, fazer a mesma proteção 
+         /// que foi feita no GET do método Edit
+
+
+
          // entrega à View os dados do Agente encontrado
          return View(agente);
       }
@@ -110,6 +124,7 @@ namespace Multas_tB.Controllers {
       /// 
       /// </summary>
       /// <returns></returns>
+      [Authorize(Roles = "GestaoDePessoal")]
       public ActionResult Create() {
          // apresenta a View para se inserir um novo Agente
          return View();
@@ -131,6 +146,7 @@ namespace Multas_tB.Controllers {
       [HttpPost]
       // anotador para proteção por roubo de identidade
       [ValidateAntiForgeryToken]
+      [Authorize(Roles = "GestaoDePessoal")]
       public ActionResult Create([Bind(Include = "Nome,Esquadra")] Agentes agente, HttpPostedFileBase uploadFotografia) {
          // escrever os dados de um novo Agente na BD 
 
@@ -224,10 +240,11 @@ namespace Multas_tB.Controllers {
 
       // GET: Agentes/Edit/5
       /// <summary>
-      /// 
+      /// apresentar na View os dados de um agente,
+      /// para eventual edição
       /// </summary>
-      /// <param name="id"></param>
-      /// <returns></returns>
+      /// <param name="id"> identifica o agente a editar</param>
+      /// <returns>view</returns>
       public ActionResult Edit(int? id) {
          // se se escrever 'int?' é possível
          // não fornecer o valor para o ID e não há erro
@@ -257,8 +274,17 @@ namespace Multas_tB.Controllers {
             return RedirectToAction("Index");
          }
 
-         // entrega à View os dados do Agente encontrado
-         return View(agente);
+         // existe Agente
+         // contudo, será que posso editá-lo?
+         if(User.IsInRole("GestaoDePessoal") ||
+            User.Identity.Name.Equals(agente.UserName)) {
+            // entrega à View os dados do Agente encontrado
+            return View(agente);
+         }
+         else {
+            // não há permissão para editar o Agente
+            return RedirectToAction("Index");
+         }
       }
 
 
@@ -269,22 +295,43 @@ namespace Multas_tB.Controllers {
       // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
       // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
       /// <summary>
-      /// 
+      /// concretiza a edição dos dados de um agente
       /// </summary>
-      /// <param name="agentes"></param>
+      /// <param name="agente"> dados do agente a alterar </param>
       /// <returns></returns>
       [HttpPost]
       [ValidateAntiForgeryToken]
-      public ActionResult Edit([Bind(Include = "ID,Nome,Esquadra,Fotografia")] Agentes agentes) {
+      public ActionResult Edit([Bind(Include = "ID,Nome,Esquadra,Fotografia,UserName")] Agentes agente) {
+
+      /// se o utilizador pertence à role 'GestaoDePessoal', 
+      ///      posso efetuar a edição, sem qq restrição
+      /// se o utilizador não pertence à role acima referida
+      ///      e NÃO é o dono dos dados, NADA se pode fazer
+      /// se o utilizador não pertence à role 
+      ///      e É O DONO dos dados, apenas pode alterar o 'nome' e a 'fotografia'
+      ///      TAREFAS:
+      ///        1- pesquisar os dados antigos do Agente na BD
+      ///        2- substituir nos dados novos, 
+      ///           o valor da 'esquadra' pelo dados antigo da 'esquadra'
+      ///        3- guardar dados na BD
+      ///        
+      ///        nota: claro que a validação do NOME e da FOTOGRAFIA também tem de acontecer
+
+
+
+
+
+
          if(ModelState.IsValid) {
             // neste caso já existe um Agente
             // apenas quero EDITAR os seus dados
-            db.Entry(agentes).State = EntityState.Modified;
+            db.Entry(agente).State = EntityState.Modified;
             // efetuar 'Commit'
             db.SaveChanges();
+
             return RedirectToAction("Index");
          }
-         return View(agentes);
+         return View(agente);
       }
 
       // GET: Agentes/Delete/5
@@ -294,6 +341,7 @@ namespace Multas_tB.Controllers {
       /// </summary>
       /// <param name="id">identificador do Agente a apagar</param>
       /// <returns></returns>
+      [Authorize(Roles = "GestaoDePessoal")]
       public ActionResult Delete(int? id) {
 
          // verificar se foi fornecido um ID válido
@@ -322,10 +370,14 @@ namespace Multas_tB.Controllers {
       // POST: Agentes/Delete/5
       [HttpPost, ActionName("Delete")]
       [ValidateAntiForgeryToken]
+      [Authorize(Roles = "GestaoDePessoal")]
       public ActionResult DeleteConfirmed(int id) {
          Agentes agente = db.Agentes.Find(id);
          try {
             // remove o Agente da BD
+
+
+
             db.Agentes.Remove(agente);
             // Commit
             db.SaveChanges();

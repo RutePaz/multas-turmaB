@@ -6,9 +6,13 @@
 
 <h2>Index</h2>
 
-<p>
-   @Html.ActionLink("Criar Novo Agente", "Create")
-</p>
+@if(User.IsInRole("GestaoDePessoal")) {
+   <p>
+      @Html.ActionLink("Criar Novo Agente", "Create")
+   </p>
+}
+
+
 <table class="table">
    <tr>
       <th>
@@ -23,24 +27,37 @@
       <th></th>
    </tr>
 
-   @foreach(var item in Model) {
+   @foreach(var agente in Model) {
       <tr>
          <td>
-            @Html.DisplayFor(modelItem => item.Nome)
+            @Html.DisplayFor(modelItem => agente.Nome)
          </td>
          <td>
-            @Html.DisplayFor(modelItem => item.Esquadra)
+            @Html.DisplayFor(modelItem => agente.Esquadra)
          </td>
          <td>
             @*@Html.DisplayFor(modelItem => item.Fotografia)*@
-            <a href="~/imagens/@item.Fotografia" target="_blank">
-               <img src="~/imagens/@item.Fotografia" width="50" height="37" />
+            <a href="~/imagens/@agente.Fotografia" target="_blank">
+               <img src="~/imagens/@agente.Fotografia" width="50" height="37" />
             </a>
          </td>
          <td>
-            @Html.ActionLink("Editar", "Edit", new { id = item.ID }) |
-            @Html.ActionLink("Detalhes", "Details", new { id = item.ID }) |
-            @Html.ActionLink("Apagar", "Delete", new { id = item.ID })
+            @if(User.IsInRole("GestaoDePessoal")) {
+               <text>
+                  @Html.ActionLink("Editar", "Edit", new { id = agente.ID }) |
+                  @Html.ActionLink("Detalhes", "Details", new { id = agente.ID }) |
+                  @Html.ActionLink("Apagar", "Delete", new { id = agente.ID })
+               </text>
+            }
+            else {
+               if(User.Identity.Name.Equals(agente.UserName)) {
+                  <text>
+                     @Html.ActionLink("Editar", "Edit", new { id = agente.ID }) |
+                     @Html.ActionLink("Detalhes", "Details", new { id = agente.ID })
+                  </text>
+               }
+            }
+
          </td>
       </tr>
    }

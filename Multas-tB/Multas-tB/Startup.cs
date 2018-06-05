@@ -49,7 +49,14 @@ namespace Multas_tB {
             roleManager.Create(role);
          }
 
-
+         // criar a Role 'GestaoDePessoal'
+         if(!roleManager.RoleExists("GestaoDePessoal")) {
+            // não existe a 'role'
+            // então, criar essa role
+            var role = new IdentityRole();
+            role.Name = "GestaoDePessoal";
+            roleManager.Create(role);
+         }
 
          // criar um utilizador 'Agente'
          var user = new ApplicationUser();
@@ -63,6 +70,22 @@ namespace Multas_tB {
          if(chkUser.Succeeded) {
             var result1 = userManager.AddToRole(user.Id, "Agentes");
          }
+
+         // criar um utilizador 'GestaoDePessoal' - André
+         user = new ApplicationUser();
+         user.UserName = "andre@mail.pt";
+         user.Email = "andre@mail.pt";
+         //  user.Nome = "Luís Freitas";
+         userPWD = "123_Asd";
+         chkUser = userManager.Create(user, userPWD);
+
+         //Adicionar o Utilizador à respetiva Role-Agente-
+         if(chkUser.Succeeded) {
+            var result1 = userManager.AddToRole(user.Id, "GestaoDePessoal");
+         }
+
+
+
       }
 
       // https://code.msdn.microsoft.com/ASPNET-MVC-5-Security-And-44cbdb97
